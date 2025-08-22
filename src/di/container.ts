@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import {
-  TYPES,
-  IApiClient,
-  IAuthService,
-  ITokenManager,
-  IHttpClient,
-  OAuthConfig
+    TYPES,
+    IApiClient,
+    IAuthService,
+    ITokenManager,
+    IHttpClient,
+    OAuthConfig
 } from './../types';
 import { ApiClient } from './../services/ApiClient';
 import { AuthService } from './../services/AuthService';
@@ -16,12 +16,16 @@ import { oauthConfig } from './../config/oauth';
 
 const container = new Container();
 
-// Bind configuration
+// Bind configuration first
 container.bind<OAuthConfig>(TYPES.OAuthConfig).toConstantValue(oauthConfig);
 
-// Bind services
+// Bind TokenManager first (no dependencies on other services)
 container.bind<ITokenManager>(TYPES.TokenManager).to(TokenManager).inSingletonScope();
+
+// Bind HttpClient (depends on TokenManager)
 container.bind<IHttpClient>(TYPES.HttpClient).to(HttpClient).inSingletonScope();
+
+// Bind higher-level services
 container.bind<IApiClient>(TYPES.ApiClient).to(ApiClient).inSingletonScope();
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
 

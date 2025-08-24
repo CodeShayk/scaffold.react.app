@@ -1,4 +1,4 @@
-# React TypeScript OAuth API Client
+# React Project Template
 
 A professional React TypeScript project with OAuth authentication, custom API client, dependency injection, and comprehensive testing.
 
